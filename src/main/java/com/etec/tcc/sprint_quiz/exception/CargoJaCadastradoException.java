@@ -11,7 +11,7 @@ public class CargoJaCadastradoException extends RuntimeException {
 		super("Cargo não cadastrado!");
 	}
 
-	public CargoJaCadastradoException(String message) {
+	public CargoJaCadastradoException(Object message) {
 		super("Cargo já cadastrado! |" + message);
 	}
 

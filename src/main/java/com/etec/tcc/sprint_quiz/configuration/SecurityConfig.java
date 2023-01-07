@@ -1,6 +1,7 @@
 package com.etec.tcc.sprint_quiz.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpMethod;
@@ -44,6 +45,8 @@ public class SecurityConfig {
 	private JwtAuthFilter jwtAuthFilter;
 	@Autowired
 	private UsuarioRepository usuarioRepository;
+	@Value("${spring.profiles.active}")
+	private String activeProfile;
 	private final String[] AUTH_LIST_SWAGGER = { "/swagger-ui/**", "/v3/api-docs/**", "/configuration/ui",
 			"/swagger-resources", "/configuration/security", "/swagger-ui.html", "/webjars/**",
 			"/swagger-resources/configuration/ui", "/swagge‌​r-ui.html", "/swagger-resources/configuration/security" };
@@ -60,6 +63,11 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
+		if (activeProfile.equals("test")) {
+            http.csrf().disable().authorizeRequests().anyRequest().permitAll();
+        } else {
+		
+		
 		// habilitando o h2 console no navegador*********************
 		http.headers().frameOptions().disable();
 		http.authorizeRequests().antMatchers("/h2-console/**").permitAll();
@@ -80,8 +88,10 @@ public class SecurityConfig {
 				.disable();// talvez tenha que ser retirada caso front end nao funcione
 //		).build();
 
-		return http.build();
+//		return http.build();
+        }
 		
+		return http.build();
 
 	}
 

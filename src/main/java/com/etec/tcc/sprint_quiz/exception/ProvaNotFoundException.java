@@ -8,7 +8,7 @@ public class ProvaNotFoundException extends RuntimeException {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public ProvaNotFoundException(String message) {
+	public ProvaNotFoundException(Object message) {
         super("Prova não encontrada! | " + message);
     }
 

@@ -9,7 +9,7 @@ public class CategoriaProvaNotFoundException extends RuntimeException {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public CategoriaProvaNotFoundException(String message) { 
+	public CategoriaProvaNotFoundException(Object message) { 
         super("Categoria de Prova não encontrada! | " + message);
     } 
 

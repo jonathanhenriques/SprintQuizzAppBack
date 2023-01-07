@@ -7,7 +7,7 @@ public class UsuarioNotFoundException extends RuntimeException{
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public UsuarioNotFoundException(String message) {
+	public UsuarioNotFoundException(Object message) {
         super("Usuário não encontrado | " + message);
     }
 

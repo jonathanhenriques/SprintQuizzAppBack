@@ -23,14 +23,14 @@ import com.etec.tcc.sprint_quiz.repository.CategoriaQuestaoRepository;
 @Component
 public class ObjectMapperUtils {
 
-	@Autowired
-	private static CategoriaQuestaoRepository categoriaQuestaoRepository;
+//	@Autowired
+//	private static CategoriaQuestaoRepository categoriaQuestaoRepository;
+//
+//	@Autowired
+//	private static AlternativaRepository alternativaRepository;
 
 	@Autowired
-	private static AlternativaRepository alternativaRepository;
-
-	@Autowired
-	private ModelMapper modelMapper;
+	private static ModelMapper modelMapper;
 	
 
 
@@ -45,7 +45,7 @@ public class ObjectMapperUtils {
 	 * @param tipoClasseSaida classe do objeto de saída.
 	 * @return new objeto do tipo <code>tipoClasseSaida</code>.
 	 */
-	public <D, T> D map(final T entidade, Class<D> tipoClasseSaida) {
+	public static <D, T> D map(final T entidade, Class<D> tipoClasseSaida) {
 		return modelMapper.map(entidade, tipoClasseSaida);
 	}
 
@@ -60,7 +60,7 @@ public class ObjectMapperUtils {
 	 * @param <T>        tipo da entrada <code>listaDeEntrada</code>
 	 * @return lista de objetos mapeados para <code> <D> </code>.
 	 */
-	public <D, T> List<D> mapAll(final Collection<T> listaDeEntrada, Class<D> classeDeSaida) {
+	public static <D, T> List<D> mapAll(final Collection<T> listaDeEntrada, Class<D> classeDeSaida) {
 		return listaDeEntrada.stream().map(obj -> map(obj, classeDeSaida)).collect(Collectors.toList());
 	}
 
@@ -70,7 +70,7 @@ public class ObjectMapperUtils {
 	 * @param entrada objeto que será mapeado
 	 * @param saida objeto para mapear para
 	 */
-	public <S, D> D map(final S entrada, D saida) {
+	public static <S, D> D map(final S entrada, D saida) {
 		modelMapper.map(entrada, saida);
 		return saida;
 	}

@@ -107,7 +107,7 @@ class AlternativaServiceImpTest {
 		when(alternativaRepository.findAll()).thenReturn(List.of(alternativa, alternativa));
 
 		// execucao
-		List<Alternativa> lista = alternativaServiceImpl.getAll();
+		List<AlternativaDTO> lista = alternativaServiceImpl.getAll();
 
 		// verificaco
 		assertNotNull(lista);
@@ -135,7 +135,7 @@ class AlternativaServiceImpTest {
 		 * Como o serviço já foi mockado é feita a chamada, como se fosse a classe real
 		 */
 		// execução
-		Alternativa response = alternativaServiceImpl.getById(ID);
+		AlternativaDTO response = alternativaServiceImpl.getById(ID);
 
 		/**
 		 * É feita a verificação comparando o que é esperado com a resposta
@@ -243,7 +243,7 @@ class AlternativaServiceImpTest {
 		when(alternativaRepository.save(any())).thenReturn(alternativa);
 
 		// execucao
-		Alternativa a = alternativaServiceImpl.put(alternativa);
+		AlternativaDTO a = alternativaServiceImpl.put(alternativaDTO);
 
 		// verificacao
 		assertNotNull(a);
@@ -257,7 +257,7 @@ class AlternativaServiceImpTest {
 
 		// execucao
 		try {
-			alternativaServiceImpl.put(alternativa);
+			alternativaServiceImpl.put(alternativaDTO);
 			verifyNoInteractions(alternativaRepository);
 		} catch (Exception e) {
 		}

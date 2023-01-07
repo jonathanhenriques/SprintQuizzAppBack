@@ -7,7 +7,7 @@ public class AlternativaNotFoundException extends RuntimeException{
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public AlternativaNotFoundException(String message) {
+	public AlternativaNotFoundException(Object message) {
         super("Alternativa não encontrada! | " + message);
     }
 

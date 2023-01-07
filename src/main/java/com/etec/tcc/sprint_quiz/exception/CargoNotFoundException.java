@@ -11,7 +11,7 @@ public class CargoNotFoundException extends RuntimeException {
 		super("Cargo não cadastrado!");
 	}
 
-	public CargoNotFoundException(String message) {
+	public CargoNotFoundException(Object message) {
 		super("Cargo não cadastrado! |" + message);
 	}
 	

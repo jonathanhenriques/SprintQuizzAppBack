@@ -50,6 +50,8 @@ public class Verificacoes {
 		
 		return args -> {
 			LOGGER.info("*********************Início códigos de TESTES livres***************************");
+//			System.out.println(new BCryptPasswordEncoder().encode("12345678")); //gerar senhas para salvar no banco usuários iniciais
+
 			
 		System.out.println("#######CARGA USUARIO#######");
 		

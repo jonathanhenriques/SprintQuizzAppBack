@@ -20,9 +20,6 @@ import com.etec.tcc.sprint_quiz.repository.QuestaoRepository;
 import com.etec.tcc.sprint_quiz.service.AlternativaService;
 import com.etec.tcc.sprint_quiz.util.ObjectMapperUtils;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @Service
 @Transactional
 public class AlternativaServiceImp implements AlternativaService {
@@ -30,58 +27,105 @@ public class AlternativaServiceImp implements AlternativaService {
 	@Autowired
 	private AlternativaRepository alternativaRepository;
 
-	@Autowired
-	private ObjectMapperUtils objectMapperUtils;
-	
+//	@Autowired
+//	private ObjectMapperUtils objectMapperUtils;
 
 	@Autowired
 	private QuestaoRepository questaoRepository;
 
-//	@Autowired
-//	private QuestaoService questaoService;
-	
 	private static final Logger LOGGER = LoggerFactory.getLogger(TesteConfigBd.class);
 
+	/**
+	 * @see AlternativaService#getAll()
+	 */
 	@Override
-	public List<Alternativa> getAll() {
-		return alternativaRepository.findAll();
+	public List<AlternativaDTO> getAll() {
+		return ObjectMapperUtils.mapAll(alternativaRepository.findAll(), AlternativaDTO.class);
 	}
 
+	/**
+	 * @see AlternativaService#findById(Long)
+	 * @throws AlternativaNotFoundException
+	 */
 	@Override
-	public Alternativa getById(Long id) {
-		return alternativaRepository.findById(id).orElseThrow(() -> new AlternativaNotFoundException(id.toString()));
+	public AlternativaDTO getById(Long id) {
+		return alternativaRepository.findById(id).map(a -> {
+			AlternativaDTO dto = ObjectMapperUtils.map(a, AlternativaDTO.class);
+			return dto;
+		}).orElseThrow(() -> new AlternativaNotFoundException(id.toString()));
+
 	}
 
-	//verificar se funciona
+	/**
+	 * @see AlternativaService#post(AlternativaDTO)
+	 */
+	// verificar se funciona
 	@Override
 	public AlternativaDTO post(AlternativaDTO alternativaDto) {
-//		questaoRepository.findById(alternativaDto.getQuestaoId()).orElseThrow(
-//				() -> new QuestaoNotFoundException("Questão não encontrada | " + alternativaDto.getQuestaoId()));
-
-		Alternativa alternativa = objectMapperUtils.map(alternativaDto, Alternativa.class);
-		alternativa = alternativaRepository.save(alternativa);
-		AlternativaDTO dto = objectMapperUtils.map(alternativa, AlternativaDTO.class);
-		return dto;
+		return ObjectMapperUtils.map(
+				alternativaRepository.save(ObjectMapperUtils.map(alternativaDto, Alternativa.class)),
+				AlternativaDTO.class);
 	}
 
+	/**
+	 * @see AlternativaService#put(AlternativaDTO)
+	 * @throws AlternativaNotFoundException
+	 */
 	@Override
-	public Alternativa put(Alternativa alternativa) {
-		alternativaRepository.findById(alternativa.getId())
-				.orElseThrow(() -> new AlternativaNotFoundException(alternativa.getId().toString()));
-		return alternativaRepository.save(alternativa);
+	public AlternativaDTO put(AlternativaDTO dto) {
+		Alternativa a = alternativaRepository.findById(dto.getId())
+				.orElseThrow(() -> new AlternativaNotFoundException(dto.getId().toString()));
+
+		return ObjectMapperUtils.map(alternativaRepository.save(a), AlternativaDTO.class);
 
 	}
+	
+	
 
+	/**
+	 * @see AlternativaService#deleteById(Long)
+	 * @throws AlternativaNotFoundException
+	 */
 	@Override
 	public void deleteById(Long id) {
-		alternativaRepository.findById(id)
-				.orElseThrow(() -> new AlternativaNotFoundException(id.toString()));
+		alternativaRepository.findById(id).orElseThrow(() -> new AlternativaNotFoundException(id.toString()));
 		alternativaRepository.deleteById(id);
 
 	}
 
+	/**
+	 * @see AlternativaService#getAllByTexto(String)
+	 */
 	@Override
-	public List<Alternativa> postListaAlternativa(List<Alternativa> alternativas) {
+	public List<AlternativaDTO> getAllByTexto(String texto) {
+		return ObjectMapperUtils.mapAll(alternativaRepository.findAllByTextoContainingIgnoreCase(texto), AlternativaDTO.class);
+	}
+
+	/**
+	 * @see AlternativaService#findById(Long) * @throws QuestaoNotFoundException
+	 * @throws AlternativaNotFoundException
+	 */
+	public void removeAlternativaDeQuestao(Long questaoId, Long alternativaId) {
+		Questao questao = questaoRepository.findById(questaoId)
+				.orElseThrow(() -> new QuestaoNotFoundException(questaoId.toString()));
+
+		alternativaRepository.findById(alternativaId)
+				.orElseThrow(() -> new AlternativaNotFoundException(alternativaId.toString()));
+
+		if (questao.getResposta().getId() == alternativaId)
+			questao.setResposta(null);
+
+		LOGGER.info("deletando da questaoId - " + questaoId + " a alternativaId" + alternativaId);
+		alternativaRepository.deleteAlternativaFromQuestao(questaoId, alternativaId);
+		LOGGER.info("excluindo relacionamento alternativa e questao lista...");
+		alternativaRepository.deleteById(alternativaId);
+		LOGGER.info("excluindo  alternativa - " + alternativaId);
+
+	}
+	
+
+//	@Override
+//	public List<Alternativa> postListaAlternativa(List<Alternativa> alternativas) {
 //		Questao questao = questaoRepository.findById(alternativas.get(0).getQuestao().getId())
 //				.orElseThrow(() -> new RegraNegocioException(
 //						"Questão não encontrada | id:" + alternativas.get(0).getQuestao().getId()));
@@ -93,10 +137,10 @@ public class AlternativaServiceImp implements AlternativaService {
 //		alternativaRepository.saveAll(alternativas);
 //
 //		questaoService.putQuestao(questao);
-		return alternativas;
-	}
+//		return alternativas;
+//	}
 
-	public List<Alternativa> postListaAlternativasComQuestaoSalva(List<Alternativa> alternativas) {
+//	public List<Alternativa> postListaAlternativasComQuestaoSalva(List<Alternativa> alternativas) {
 //		Questao questao = alternativas.get(0).getQuestao();
 //
 //		alternativas.forEach(a -> {
@@ -106,28 +150,8 @@ public class AlternativaServiceImp implements AlternativaService {
 //		alternativaRepository.saveAll(alternativas);
 //
 //		questaoService.putQuestao(questao);
-		return alternativas;
-	}
+//		return alternativas;
+//	}
 
-	@Override
-	 public List<Alternativa> getAllByTexto(String texto) {
-    	return alternativaRepository.findAllByTextoContainingIgnoreCase(texto);
-    }
-	
-	public void deletaAlternativaDeQuestao(Long questaoId, Long alternativaId){
-		Questao questao = questaoRepository.findById(questaoId).orElseThrow(() -> new QuestaoNotFoundException(questaoId.toString()));
-		
-		alternativaRepository.findById(alternativaId).orElseThrow(() -> new AlternativaNotFoundException(alternativaId.toString()));
-		
-		if(questao.getResposta().getId() == alternativaId)
-			questao.setResposta(null);
-		
-		LOGGER.info("questaoId - " + questaoId + "alternativaId" + alternativaId);
-		alternativaRepository.deleteAlternativaFromQuestao(questaoId, alternativaId);
-		LOGGER.info("aexcluindo relacionamento alternativa e questao lista");
-		alternativaRepository.deleteById(alternativaId);
-		LOGGER.info("aexcluindo  alternativa - " + alternativaId);
-		
-	}
 
 }

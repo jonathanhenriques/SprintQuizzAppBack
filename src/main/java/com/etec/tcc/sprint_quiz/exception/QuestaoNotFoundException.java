@@ -7,7 +7,7 @@ public class QuestaoNotFoundException extends RuntimeException{
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public QuestaoNotFoundException(String message) {
+	public QuestaoNotFoundException(Object message) {
         super("Questão não encontrada | " + message);
     }
 

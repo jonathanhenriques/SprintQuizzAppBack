@@ -77,7 +77,7 @@ public class Questao {
 	@OneToMany(fetch = FetchType.EAGER)
 //	@OneToMany(orphanRemoval = true)
 	@Cascade(CascadeType.MERGE)
-	@JoinTable(name = "tb_questao_alternativas1", joinColumns = @JoinColumn(name = "questao_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "alternativa_id", referencedColumnName = "id"))
+	@JoinTable(name = "tb_questao_alternativas", joinColumns = @JoinColumn(name = "questao_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "alternativa_id", referencedColumnName = "id"))
 //	@JsonIgnoreProperties(value = { "questao" }, allowSetters = true)
 	private Set<Alternativa> alternativas;
 //    private Alternativa alternativas;

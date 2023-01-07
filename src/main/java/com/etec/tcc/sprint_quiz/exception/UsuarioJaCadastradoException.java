@@ -12,7 +12,7 @@ public class UsuarioJaCadastradoException extends RuntimeException {
 		super("Usuário já cadastrado!");
 	}
 
-	public UsuarioJaCadastradoException(String message) {
+	public UsuarioJaCadastradoException(Object message) {
 		super("Usuário já cadastrado! | " + message);
 	}
 

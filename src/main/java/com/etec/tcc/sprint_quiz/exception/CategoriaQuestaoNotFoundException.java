@@ -8,7 +8,7 @@ public class CategoriaQuestaoNotFoundException extends RuntimeException {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public CategoriaQuestaoNotFoundException(String message) {
+	public CategoriaQuestaoNotFoundException(Object message) {
         super("Categoria da Questão não encontrada | " + message);
     }
 
