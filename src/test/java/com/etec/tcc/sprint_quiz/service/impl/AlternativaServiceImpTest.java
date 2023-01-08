@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 //import org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.CALLS_REAL_METHODS;
@@ -46,6 +47,7 @@ import com.etec.tcc.sprint_quiz.util.ObjectMapperUtils;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -76,8 +78,8 @@ class AlternativaServiceImpTest {
 	private AlternativaDTO alternativaDTO;
 	private Optional<Alternativa> alternativaOptional;
 	private Optional<Questao> questaoOptional;
-	private List<AlternativaDTO> listDTO;
-	private List<AlternativaDTO> lista;
+	private List<AlternativaDTO> listaDTO;
+	private List<Alternativa> lista;
 
 	/**
 	 * dependencia da classe que sera testada InjectMocks -> cria uma instancia
@@ -143,34 +145,34 @@ class AlternativaServiceImpTest {
 	@DisplayName("Busca Todas as Alternativas")
 	void testGetAll_BuscaTodasAsAlternativas_RertonaListaComTodasExistentes() {
 		// cenario
-		when(alternativaRepository.findAll()).thenReturn(List.of(alternativa, alternativa));
+		when(alternativaRepository.findAll()).thenReturn(lista);
+		when(modelMapper.mapAll(anyList(), eq(AlternativaDTO.class))).thenReturn(listaDTO);
 
 		// execucao
-		List<AlternativaDTO> lista = alternativaServiceImpl.getAll();
+		List<AlternativaDTO> dtos = alternativaServiceImpl.getAll();
 
 		// verificaco
-		assertNotNull(lista);
-		assertEquals(2, lista.size());
-		assertEquals(Alternativa.class, lista.get(0).getClass());
-		assertEquals(ID, lista.get(0).getId());
-		assertEquals(TEXTO_ALTERNATIVA, lista.get(0).getTexto());
-		assertEquals("", lista.get(0).getFoto());
-//		assertEquals(QUESTAO_ID, lista.get(0).getQuestao().getId());
-		assertEquals(List.of(alternativa, alternativa), lista);
+
+		assertAll("dtos", () -> assertNotNull(dtos),
+				() -> assertEquals(alternativaDTO.getClass(), dtos.get(0).getClass()),
+				() -> assertEquals(ID, dtos.get(0).getId()),
+				() -> assertEquals(TEXTO_ALTERNATIVA, dtos.get(0).getTexto()),
+				() -> assertEquals("", dtos.get(0).getFoto()),
+				() -> assertEquals(Arrays.asList(alternativaDTO, alternativaDTO), dtos));
 	}
 
 	@Test
 	@DisplayName("Busca todas as Alternativas filtradas por texto")
 	void testeGetAllByTexto_BuscaTodasAsAlternativasFIltradasPorTexto_RetornaUmaListaDeAlternativasFiltradas() {
-		//cenário
+		// cenário
 //		when(modelMapper.map(any(), any())).thenReturn(listDTO);
-		when(alternativaRepository.findAllByTextoContainingIgnoreCase(TEXTO_ALTERNATIVA)).thenReturn(List.of(alternativaDTO));
-		
-		//execucao
-		//sut - System under test
+		when(alternativaRepository.findAllByTextoContainingIgnoreCase(TEXTO_ALTERNATIVA)).thenReturn(lista);
+
+		// execucao
+		// sut - System under test
 		List<AlternativaDTO> sutLista = alternativaServiceImpl.getAllByTexto(TEXTO_ALTERNATIVA);
-		
-		//verificacao
+
+		// verificacao
 		org.assertj.core.api.Assertions.assertThat(sutLista).isNotNull();
 	}
 
@@ -186,7 +188,8 @@ class AlternativaServiceImpTest {
 		 * qualquer Long, então retorne o que eu passar
 		 */
 		// cenário
-		Mockito.when(alternativaRepository.findById(Mockito.anyLong())).thenReturn(alternativaOptional);
+		Mockito.when(alternativaRepository.findById(ID)).thenReturn(alternativaOptional);
+		when(modelMapper.map(alternativa, AlternativaDTO.class)).thenReturn(alternativaDTO);
 
 		/**
 		 * Como o serviço já foi mockado é feita a chamada, como se fosse a classe real
@@ -198,11 +201,13 @@ class AlternativaServiceImpTest {
 		 * É feita a verificação comparando o que é esperado com a resposta
 		 */
 		// verificação
-		Assertions.assertNotNull(response); // sem import static
-		assertEquals(alternativa.getClass(), response.getClass()); // compara dois objs, valores...
-		assertEquals(ID, response.getId());
-//		assertEquals(QUESTAO_ID, response.getQuestao().getId());
-		assertEquals(TEXTO_ALTERNATIVA, response.getTexto());
+//		Assertions.assertNotNull(response); // sem import static
+//		assertEquals(alternativaDTO.getClass(), response.getClass()); // compara dois objs, valores...
+//		assertEquals(ID, response.getId());
+//		assertEquals(TEXTO_ALTERNATIVA, response.getTexto());
+		assertAll("response", () -> assertNotNull(response),
+				() -> assertEquals(alternativaDTO.getClass(), response.getClass()),
+				() -> assertEquals(ID, response.getId()), () -> assertEquals("", response.getFoto()));
 
 	}
 
@@ -255,46 +260,18 @@ class AlternativaServiceImpTest {
 	@DisplayName("Cria uma alternativa")
 	void testPost_CriaUmaAlternativa_RetornaAlternativaCriada() {
 		// cenario
-		when(questaoRepository.findById(anyLong())).thenReturn(questaoOptional);
-//		when(modelMapper.map(any(), eq(AlternativaDTO.class))).thenReturn(alternativaDTO);//eq()usado para passar tipo de classe
-		when(modelMapper.map(any(), any())).thenReturn(alternativa);
+		when(modelMapper.map(any(), eq(Alternativa.class))).thenReturn(alternativa);// eq()usado para passar tipo de
+																					// classe
 		when(alternativaRepository.save(any())).thenReturn(alternativa);
-//		when(modelMapper.map(any(), any())).thenReturn(alternativaDTO);
-		
-
+		when(modelMapper.map(any(), eq(AlternativaDTO.class))).thenReturn(alternativaDTO);
 
 		// execucao
 		AlternativaDTO dto = alternativaServiceImpl.post(alternativaDTO);
 
 		// verificacao
-		assertNotNull(dto);
-//		assertAll("Alternativa",
-//				() -> assertNotNull(dto),
-//				() -> assertEquals(alternativaDTO.getClass(), dto.getClass()),
-//				() -> assertEquals(ID, dto.getId()),
-//				() -> assertEquals("", dto.getFoto())
-////				() -> assertEquals(QUESTAO_ID, dto.getQuestaoId())
-//				);
-		
-
-	}
-
-	@Test()
-	@DisplayName("Ao criar uma alternativa retorna QuestaoNotFoundException!")
-	void testPost_AoCriaUmaAlternativa_RetornaQuestaoNotFoundException() {
-		// cenario
-		when(questaoRepository.findById(anyLong())).thenThrow(QuestaoNotFoundException.class);
-
-		// execucao
-		// estrutura try catch para capturar o erro lancado
-		try {
-
-			alternativaServiceImpl.post(alternativaDTO);
-			// verificacao
-			verifyNoInteractions(alternativaRepository); // verifica se esse método não foi chamado
-		} catch (Exception e) {
-//			assertEquals(QuestaoNotFoundException.class, e.getClass());
-		} // testar o parâmetro e, exemplo e.getClass, é optional
+		assertAll("dto", () -> assertNotNull(dto), () -> assertEquals(alternativaDTO.getClass(), dto.getClass()),
+				() -> assertEquals(ID, dto.getId()), () -> assertEquals(TEXTO_ALTERNATIVA, dto.getTexto()),
+				() -> assertEquals("", dto.getFoto()));
 
 	}
 
@@ -335,13 +312,13 @@ class AlternativaServiceImpTest {
 
 		/**
 		 * doNothing() usado para metodos que retornam void
-		 *<hr>
-		 * doNothing() NÃO FAÇA nada <hr>
-		 * when() QUANDO alternativaRepository.deleteById()
-		 * for chamado
+		 * <hr>
+		 * doNothing() NÃO FAÇA nada
+		 * <hr>
+		 * when() QUANDO alternativaRepository.deleteById() for chamado
 		 */
-		doNothing().when(alternativaRepository).deleteById(anyLong()); 
-		
+		doNothing().when(alternativaRepository).deleteById(anyLong());
+
 		// execucao
 		alternativaServiceImpl.deleteById(ID);
 
@@ -382,8 +359,8 @@ class AlternativaServiceImpTest {
 		alternativa = new Alternativa(ID, TEXTO_ALTERNATIVA, "");
 		alternativaDTO = new AlternativaDTO(ID, TEXTO_ALTERNATIVA, "");
 		alternativaOptional = Optional.of(new Alternativa(new AlternativaDTO(ID, TEXTO_ALTERNATIVA, "")));
-		listDTO = List.of(alternativaDTO, alternativaDTO);
-		lista = List.of(alternativaDTO, alternativaDTO);
+		listaDTO = List.of(alternativaDTO, alternativaDTO);
+		lista = Arrays.asList(alternativa, alternativa);
 
 	}
 

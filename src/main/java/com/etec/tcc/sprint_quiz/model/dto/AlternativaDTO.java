@@ -34,7 +34,7 @@ public class AlternativaDTO {
 	@NotNull(message = "texto {campo.texto.notnull.obrigatorio}")
 	@Size(max = 1000)
 	private String texto;
-	@NotNull(message = "foto {campo.texto.notnull.obrigatorio}")
+//	@NotNull(message = "foto {campo.texto.notnull.obrigatorio}")
 	@Size(max = 1000)
 	private String foto;
 

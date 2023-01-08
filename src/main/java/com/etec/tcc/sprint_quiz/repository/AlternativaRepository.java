@@ -29,7 +29,7 @@ public interface AlternativaRepository extends JpaRepository<Alternativa, Long> 
 	 * 
 	 * @return <code> List</code>AlternativaDTO
 	 */
-	List<AlternativaDTO> findAllByTextoContainingIgnoreCase(@Param("texto") String texto);
+	List<Alternativa> findAllByTextoContainingIgnoreCase(@Param("texto") String texto);
 
 	
 	/**

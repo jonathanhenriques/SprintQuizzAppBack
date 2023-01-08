@@ -41,7 +41,9 @@ public class AlternativaServiceImp implements AlternativaService {
 	 */
 	@Override
 	public List<AlternativaDTO> getAll() {
-		return modelMapper.mapAll(alternativaRepository.findAll(), AlternativaDTO.class);
+		List<Alternativa> listaAlternativa = alternativaRepository.findAll();
+		List<AlternativaDTO> listaDTO = modelMapper.mapAll(listaAlternativa, AlternativaDTO.class);
+		return listaDTO;
 	}
 
 	/**
@@ -63,9 +65,10 @@ public class AlternativaServiceImp implements AlternativaService {
 	// verificar se funciona
 	@Override
 	public AlternativaDTO post(AlternativaDTO alternativaDto) {
-		return modelMapper.map(
-				alternativaRepository.save(modelMapper.map(alternativaDto, Alternativa.class)),
-				AlternativaDTO.class);
+		Alternativa alternativa = modelMapper.map(alternativaDto, Alternativa.class);
+		Alternativa alternativaSalva = alternativaRepository.save(alternativa);
+		AlternativaDTO dto = modelMapper.map(alternativaSalva, AlternativaDTO.class);
+		return dto;
 	}
 
 	/**

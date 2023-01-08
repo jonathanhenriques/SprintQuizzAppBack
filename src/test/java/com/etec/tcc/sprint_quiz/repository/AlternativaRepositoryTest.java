@@ -39,7 +39,7 @@ class AlternativaRepositoryTest {
 	@Test
 	@DisplayName("Retorna uma lista filtrada por texto")
 	void testFindAllByTextoContainingIgnoreCaseDeveriaRetornarUmaListaDeAlternativaFiltradaPorTexto() {
-		List<AlternativaDTO> lista = repository.findAllByTextoContainingIgnoreCase("Verde");
+		List<Alternativa> lista = repository.findAllByTextoContainingIgnoreCase("Verde");
 		assertEquals("Verde", lista.get(0).getTexto());
 		assertEquals(3, lista.size());
 	}
