@@ -30,7 +30,7 @@ public interface QuestaoService {
 
 	List<Questao> getQuestoesByCriadorId(@PathVariable Long criadorId);
 
-	Questao postQuestao(@Valid @RequestBody Questao questao);
+	QuestaoDTO postQuestao(@Valid @RequestBody QuestaoDTO questao);
 
 	Questao salvarQuestaoComAlternativa(@RequestBody Questao questao);
 

@@ -131,8 +131,8 @@ public class AlternativaController {
 	 */
 	@Operation(summary = "cria uma nova alternativa")
 	@PostMapping
-	public ResponseEntity<AlternativaDTO> post(@Valid @RequestBody AlternativaDTO alternativa) {
-		return ResponseEntity.status(HttpStatus.CREATED).body(alternativaService.post(alternativa));
+	public ResponseEntity<AlternativaDTO> post(@Valid @RequestBody AlternativaDTO alternativaDTO) {
+		return ResponseEntity.status(HttpStatus.CREATED).body(alternativaService.post(alternativaDTO));
 	}
 
 	/**

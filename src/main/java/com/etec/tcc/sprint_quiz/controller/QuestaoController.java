@@ -23,6 +23,7 @@ import com.etec.tcc.sprint_quiz.model.Questao;
 import com.etec.tcc.sprint_quiz.model.dto.QuestaoDTO;
 import com.etec.tcc.sprint_quiz.repository.QuestaoRepository;
 import com.etec.tcc.sprint_quiz.service.QuestaoService;
+import com.etec.tcc.sprint_quiz.util.ObjectMapperUtils;
 
 import io.swagger.v3.oas.annotations.Operation;
 
@@ -37,6 +38,9 @@ public class QuestaoController {
 
     @Autowired
     private QuestaoService questaoService;
+    
+    @Autowired
+    private ObjectMapperUtils modelMapper;
 
     @Operation(summary = "Obtem todas as questoes")
     @GetMapping
@@ -94,11 +98,12 @@ public class QuestaoController {
 
     @Operation(summary = "Cadastra uma questao")
     @PostMapping
-    public ResponseEntity<Questao> postQuestao(@Valid @RequestBody
+    public ResponseEntity<QuestaoDTO> postQuestao(@Valid @RequestBody
 //                                                       @DateTimeFormat(
 //                                                                  iso = DateTimeFormat.ISO.DATE)
-                                                       Questao questao) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(questaoService.postQuestao(questao));
+                                                       QuestaoDTO questaoDTO) {
+    	
+        return ResponseEntity.status(HttpStatus.CREATED).body(questaoService.postQuestao(questaoDTO));
     }
 
     @Operation(summary = "Cadastra uma questao com alternativas")

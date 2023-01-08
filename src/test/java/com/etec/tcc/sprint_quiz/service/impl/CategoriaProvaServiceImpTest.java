@@ -1,4 +1,4 @@
-package com.etec.tcc.sprint_quiz.service;
+package com.etec.tcc.sprint_quiz.service.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;

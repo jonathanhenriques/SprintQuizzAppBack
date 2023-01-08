@@ -15,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.ResponseEntity;
 
 import com.etec.tcc.sprint_quiz.model.Alternativa;
+import com.etec.tcc.sprint_quiz.model.dto.AlternativaDTO;
 
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -38,7 +39,7 @@ class AlternativaRepositoryTest {
 	@Test
 	@DisplayName("Retorna uma lista filtrada por texto")
 	void testFindAllByTextoContainingIgnoreCaseDeveriaRetornarUmaListaDeAlternativaFiltradaPorTexto() {
-		List<Alternativa> lista = repository.findAllByTextoContainingIgnoreCase("Verde");
+		List<AlternativaDTO> lista = repository.findAllByTextoContainingIgnoreCase("Verde");
 		assertEquals("Verde", lista.get(0).getTexto());
 		assertEquals(3, lista.size());
 	}

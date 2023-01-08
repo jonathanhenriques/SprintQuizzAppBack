@@ -1,15 +1,13 @@
 package com.etec.tcc.sprint_quiz.model.dto;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.hibernate.annotations.CreationTimestamp;
-
 import com.etec.tcc.sprint_quiz.enums.DificuldadeQuestao;
-import com.etec.tcc.sprint_quiz.model.Alternativa;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -43,7 +41,9 @@ public class QuestaoDTO {
 	private DificuldadeQuestao dificuldade;
 	private Set<AlternativaDTO> alternativas;
 	private AlternativaDTO resposta;
+	@NotNull(message = "idCategoriaQuestao {campo.texto.notnull.obrigatorio}")
 	private Long idCategoriaQuestao;
+	@NotNull(message = "criadorId {campo.texto.notnull.obrigatorio}")
 	private Long criadorId;
 	@Override
 	public String toString() {

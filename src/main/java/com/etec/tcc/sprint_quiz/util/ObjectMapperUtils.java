@@ -7,32 +7,54 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import com.etec.tcc.sprint_quiz.exception.AlternativaNotFoundException;
-import com.etec.tcc.sprint_quiz.exception.CategoriaQuestaoNotFoundException;
 import com.etec.tcc.sprint_quiz.model.Alternativa;
-import com.etec.tcc.sprint_quiz.model.CategoriaQuestao;
 import com.etec.tcc.sprint_quiz.model.Questao;
 import com.etec.tcc.sprint_quiz.model.dto.AlternativaDTO;
 import com.etec.tcc.sprint_quiz.model.dto.QuestaoDTO;
 import com.etec.tcc.sprint_quiz.repository.AlternativaRepository;
-import com.etec.tcc.sprint_quiz.repository.CategoriaQuestaoRepository;
+
 @Component
 public class ObjectMapperUtils {
 
 //	@Autowired
-//	private static CategoriaQuestaoRepository categoriaQuestaoRepository;
-//
-//	@Autowired
-//	private static AlternativaRepository alternativaRepository;
-
-	@Autowired
 	private static ModelMapper modelMapper;
 	
+	@Autowired
+	private static AlternativaRepository alternativaRepository;
+	
 
+
+static {
+    modelMapper = new ModelMapper();
+//    modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+    
+	Converter<HashSet<AlternativaDTO>, HashSet<Alternativa>> setAlternativaDTOParaSetAlternativaConverter = obj -> {
+		return obj.getSource().stream().map(dto -> {
+
+			Alternativa alternativa = alternativaRepository.findById(dto.getId())
+					.orElseThrow(() -> new AlternativaNotFoundException(obj.toString()));
+			return alternativa;
+
+		}).collect(Collectors.toCollection(HashSet::new));
+//		}).collect(Collectors.toSet());
+
+	};
+	
+	
+	
+	modelMapper.createTypeMap(QuestaoDTO.class, Questao.class)
+	.addMappings(mapper -> mapper.using(setAlternativaDTOParaSetAlternativaConverter)
+			.map(QuestaoDTO::getAlternativas, Questao::setAlternativas));
+    
+}
+
+private ObjectMapperUtils() {
+}
 
 	/**
 	 * <p>
@@ -45,7 +67,7 @@ public class ObjectMapperUtils {
 	 * @param tipoClasseSaida classe do objeto de saída.
 	 * @return new objeto do tipo <code>tipoClasseSaida</code>.
 	 */
-	public static <D, T> D map(final T entidade, Class<D> tipoClasseSaida) {
+	public <D, T> D map(final T entidade, Class<D> tipoClasseSaida) {
 		return modelMapper.map(entidade, tipoClasseSaida);
 	}
 
@@ -60,7 +82,7 @@ public class ObjectMapperUtils {
 	 * @param <T>        tipo da entrada <code>listaDeEntrada</code>
 	 * @return lista de objetos mapeados para <code> <D> </code>.
 	 */
-	public static <D, T> List<D> mapAll(final Collection<T> listaDeEntrada, Class<D> classeDeSaida) {
+	public <D, T> List<D> mapAll(final Collection<T> listaDeEntrada, Class<D> classeDeSaida) {
 		return listaDeEntrada.stream().map(obj -> map(obj, classeDeSaida)).collect(Collectors.toList());
 	}
 
@@ -70,7 +92,7 @@ public class ObjectMapperUtils {
 	 * @param entrada objeto que será mapeado
 	 * @param saida objeto para mapear para
 	 */
-	public static <S, D> D map(final S entrada, D saida) {
+	public <S, D> D map(final S entrada, D saida) {
 		modelMapper.map(entrada, saida);
 		return saida;
 	}

@@ -1,6 +1,8 @@
 package com.etec.tcc.sprint_quiz.repository;
 
 import com.etec.tcc.sprint_quiz.model.Alternativa;
+import com.etec.tcc.sprint_quiz.model.dto.AlternativaDTO;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -25,9 +27,9 @@ public interface AlternativaRepository extends JpaRepository<Alternativa, Long> 
 	 * @author Jonathan Henrique
 	 * @date 28/11/2022
 	 * 
-	 * @return <code>List<Alternativa></code>
+	 * @return <code> List</code>AlternativaDTO
 	 */
-	List<Alternativa> findAllByTextoContainingIgnoreCase(@Param("texto") String texto);
+	List<AlternativaDTO> findAllByTextoContainingIgnoreCase(@Param("texto") String texto);
 
 	
 	/**

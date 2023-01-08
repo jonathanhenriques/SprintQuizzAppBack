@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +28,8 @@ public class AlternativaServiceImp implements AlternativaService {
 	@Autowired
 	private AlternativaRepository alternativaRepository;
 
-//	@Autowired
-//	private ObjectMapperUtils objectMapperUtils;
+	@Autowired
+	private ObjectMapperUtils modelMapper;
 
 	@Autowired
 	private QuestaoRepository questaoRepository;
@@ -40,7 +41,7 @@ public class AlternativaServiceImp implements AlternativaService {
 	 */
 	@Override
 	public List<AlternativaDTO> getAll() {
-		return ObjectMapperUtils.mapAll(alternativaRepository.findAll(), AlternativaDTO.class);
+		return modelMapper.mapAll(alternativaRepository.findAll(), AlternativaDTO.class);
 	}
 
 	/**
@@ -50,7 +51,7 @@ public class AlternativaServiceImp implements AlternativaService {
 	@Override
 	public AlternativaDTO getById(Long id) {
 		return alternativaRepository.findById(id).map(a -> {
-			AlternativaDTO dto = ObjectMapperUtils.map(a, AlternativaDTO.class);
+			AlternativaDTO dto = modelMapper.map(a, AlternativaDTO.class);
 			return dto;
 		}).orElseThrow(() -> new AlternativaNotFoundException(id.toString()));
 
@@ -62,8 +63,8 @@ public class AlternativaServiceImp implements AlternativaService {
 	// verificar se funciona
 	@Override
 	public AlternativaDTO post(AlternativaDTO alternativaDto) {
-		return ObjectMapperUtils.map(
-				alternativaRepository.save(ObjectMapperUtils.map(alternativaDto, Alternativa.class)),
+		return modelMapper.map(
+				alternativaRepository.save(modelMapper.map(alternativaDto, Alternativa.class)),
 				AlternativaDTO.class);
 	}
 
@@ -76,7 +77,7 @@ public class AlternativaServiceImp implements AlternativaService {
 		Alternativa a = alternativaRepository.findById(dto.getId())
 				.orElseThrow(() -> new AlternativaNotFoundException(dto.getId().toString()));
 
-		return ObjectMapperUtils.map(alternativaRepository.save(a), AlternativaDTO.class);
+		return modelMapper.map(alternativaRepository.save(a), AlternativaDTO.class);
 
 	}
 	
@@ -98,7 +99,8 @@ public class AlternativaServiceImp implements AlternativaService {
 	 */
 	@Override
 	public List<AlternativaDTO> getAllByTexto(String texto) {
-		return ObjectMapperUtils.mapAll(alternativaRepository.findAllByTextoContainingIgnoreCase(texto), AlternativaDTO.class);
+		return modelMapper.mapAll(alternativaRepository.findAllByTextoContainingIgnoreCase(texto), AlternativaDTO.class);
+//		return modelMapper.map(alternativaRepository.findAllByTextoContainingIgnoreCase(texto), AlternativaDTO.class);
 	}
 
 	/**

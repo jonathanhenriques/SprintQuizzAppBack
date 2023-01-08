@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,17 +53,16 @@ public class QuestaoServiceImp implements QuestaoService {
 	@Autowired
 	@Lazy
 	private AlternativaService alternativaService;
-	
-	
+
 	@Autowired
-	private ObjectMapperUtils objectMapperUtils;
-	
+	private ObjectMapperUtils modelMapper;
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(TesteConfigBd.class);
 
 	@Override
 	public List<QuestaoDTO> getAll() {
 		List<Questao> lista = questaoRepository.findAll();
-		List<QuestaoDTO> listaDTO = (List<QuestaoDTO>) objectMapperUtils.map(lista, QuestaoDTO.class);//VERIFICAR SE FUNCIONA
+		List<QuestaoDTO> listaDTO = (List<QuestaoDTO>) modelMapper.map(lista, QuestaoDTO.class);// VERIFICAR SE FUNCIONA
 		return listaDTO;
 	}
 
@@ -104,22 +104,17 @@ public class QuestaoServiceImp implements QuestaoService {
 	}
 
 	@Override
-	public Questao postQuestao(@Valid @RequestBody Questao questao) {
-		usuarioRepository.findById(questao.getCriador().getId())
-				.orElseThrow(() -> new UsuarioNotFoundException(questao.getCriador().getId().toString()));
-		return categoriaQuestaoRepository.findById(questao.getCategoria().getId()) 
-				.map(c -> questaoRepository.save(questao))
-				.orElseThrow(() -> new CategoriaQuestaoNotFoundException(questao.getCategoria().getId().toString()));
+	public QuestaoDTO postQuestao(@Valid @RequestBody QuestaoDTO questaoDTO) {
+		usuarioRepository.findById(questaoDTO.getCriadorId())
+				.orElseThrow(() -> new UsuarioNotFoundException(questaoDTO.getCriadorId()));
+
+		categoriaQuestaoRepository.findById(questaoDTO.getIdCategoriaQuestao())
+				.orElseThrow(() -> new CategoriaQuestaoNotFoundException(questaoDTO.getCriadorId()));
+
+		Questao questaoSalva = questaoRepository.save(modelMapper.map(questaoDTO, Questao.class));
+		return modelMapper.map(questaoSalva, QuestaoDTO.class);
 
 	}
-
-//	private Questao salvaQuestao(Questao questao) {
-//		usuarioRepository.findById(questao.getCriador().getId())
-//				.orElseThrow(() -> new UsuarioNotFoundException(questao.getCriador().getId().toString()));
-//		return categoriaQuestaoRepository.findById(questao.getCategoria().getId())
-//				.map(c -> questaoRepository.save(questao))
-//				.orElseThrow(() -> new CategoriaQuestaoNotFoundException(questao.getCategoria().getId().toString()));
-//	}
 
 	@Transactional
 	public Questao salvarQuestaoComAlternativa(@RequestBody Questao questao) {
@@ -136,24 +131,25 @@ public class QuestaoServiceImp implements QuestaoService {
 
 		return questao;
 	}
-	
+
 	@Override
 	public QuestaoDTO putQuestao(@Valid @RequestBody QuestaoDTO dto) {
 		questaoRepository.findById(dto.getId()).orElseThrow(() -> new QuestaoNotFoundException(dto.getId().toString()));
 		for (AlternativaDTO a : dto.getAlternativas()) {
-			alternativaRepository.findById(a.getId()).orElseThrow(() -> new AlternativaNotFoundException(a.getId().toString()));
+			alternativaRepository.findById(a.getId())
+					.orElseThrow(() -> new AlternativaNotFoundException(a.getId().toString()));
 		}
-		
+
 //		Alternativa resposta =  alternativaRepository.findById(dto.getResposta().getId()).orElseThrow(() -> new AlternativaNotFoundException(dto.getId().toString()));
 //		Questao questaoRequest = modelMapper.map(dto, Questao.class);
-		Questao questaoRequest = objectMapperUtils.map(dto, Questao.class);////////
+		Questao questaoRequest = modelMapper.map(dto, Questao.class);////////
 //		questaoRequest.setResposta(resposta);
 //		questaoRepository.save(questaoRequest);
-		QuestaoDTO dtoResponse = objectMapperUtils.map(questaoRepository.save(questaoRequest), QuestaoDTO.class);
+		QuestaoDTO dtoResponse = modelMapper.map(questaoRepository.save(questaoRequest), QuestaoDTO.class);
 //		dtoResponse.setResposta(modelMapper.map(resposta, AlternativaDTO.class));
-		
+
 		return dtoResponse;
-		
+
 	}
 
 //	@Override
@@ -206,7 +202,7 @@ public class QuestaoServiceImp implements QuestaoService {
 //		return dtoResponse;
 //		
 //	}
-	
+
 //	public Set<AlternativaDTO> converteListaAlternativaParaListaAlternativaDTO(Set<Alternativa> alternativas) {
 //		return alternativas.stream().map(a -> new AlternativaDTO(a)).collect(Collectors.toSet());
 //	}

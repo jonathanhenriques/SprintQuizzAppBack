@@ -3,6 +3,7 @@ package com.etec.tcc.sprint_quiz.model.dto;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -33,6 +34,8 @@ public class AlternativaDTO {
 	@NotNull(message = "texto {campo.texto.notnull.obrigatorio}")
 	@Size(max = 1000)
 	private String texto;
+	@NotNull(message = "foto {campo.texto.notnull.obrigatorio}")
+	@Size(max = 1000)
 	private String foto;
 
 	public AlternativaDTO(Alternativa alternativa) {
