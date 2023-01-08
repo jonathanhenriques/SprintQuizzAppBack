@@ -103,4 +103,3 @@ INSERT INTO tb_alternativa(texto, foto) VALUES('Roxo', '');
 --INSERT INTO tb_questao(alternativa_id) WHERE (id = 2) VALUES (4);
 --INSERT INTO tb_questao(alternativa_id) WHERE (id = 2) VALUES (5);
 --INSERT INTO tb_questao(alternativa_id) WHERE (id = 2) VALUES (6);
-

@@ -17,11 +17,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+import org.springframework.beans.factory.annotation.Value;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -83,7 +83,8 @@ public class Usuario implements Serializable {
 	
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
 //	@ManyToMany
-	@Pattern(regexp="^(ROLE_ADMIN|ROLE_USER)$",message="{campo.padroes.role}")
+//	@Pattern(regexp="^(ROLE_ADMIN|ROLE_USER)$",message="{campo.padroes.role}")
+//	@Value("#{role.padrao?: ROLE_USER}") //NÃO FUNCIONA
 	private Collection<Role> roles = new ArrayList<>();
 
 	@OneToMany(mappedBy = "criador")@LazyCollection(LazyCollectionOption.FALSE)
