@@ -134,6 +134,14 @@ public class AlternativaController {
 	public ResponseEntity<AlternativaDTO> post(@Valid @RequestBody AlternativaDTO alternativaDTO) {
 		return ResponseEntity.status(HttpStatus.CREATED).body(alternativaService.post(alternativaDTO));
 	}
+	
+	
+	@Operation(summary = "salva uma lista de alternativas")
+	@PostMapping("/listaAlternativas")
+	ResponseEntity<List<AlternativaDTO>> postListaAlternativa(@Valid @RequestBody List<AlternativaDTO> alternativasDTO){
+		return ResponseEntity.ok(alternativaService.postListaAlternativa(alternativasDTO));
+	}
+	
 
 	/**
 	 * Método que atualiza uma Alternativa.

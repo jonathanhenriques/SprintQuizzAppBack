@@ -205,9 +205,12 @@ class AlternativaServiceImpTest {
 //		assertEquals(alternativaDTO.getClass(), response.getClass()); // compara dois objs, valores...
 //		assertEquals(ID, response.getId());
 //		assertEquals(TEXTO_ALTERNATIVA, response.getTexto());
-		assertAll("response", () -> assertNotNull(response),
+		assertAll("response",
+				() -> assertNotNull(response),
 				() -> assertEquals(alternativaDTO.getClass(), response.getClass()),
-				() -> assertEquals(ID, response.getId()), () -> assertEquals("", response.getFoto()));
+				() -> assertEquals(ID, response.getId()),
+				() -> assertEquals(TEXTO_ALTERNATIVA, response.getId()),
+				() -> assertEquals("", response.getFoto()));
 
 	}
 
@@ -246,10 +249,20 @@ class AlternativaServiceImpTest {
 		}
 	}
 
-//	@Test
-//	void testPostListaAlternativa() {
-//		fail("Not yet implemented");
-//	}
+	@Test
+	@DisplayName("Deveria salvar uma lista de alternativas")
+	void testPost_ListaAlternativa_RetornaAListaDeAlternativasSalvas() {
+		//cenario
+		when(modelMapper.mapAll(anyList(), eq(Alternativa.class))).thenReturn(lista);
+		when(alternativaRepository.saveAll(anyList())).thenReturn(lista);
+		when(modelMapper.mapAll(anyList(), eq(AlternativaDTO.class))).thenReturn(listaDTO);
+		
+		//execucao
+		List<AlternativaDTO> dtos = alternativaServiceImpl.postListaAlternativa(listaDTO);
+		
+		//verificacoes
+		assertAll("dtos", () ->assertNotNull(dtos));
+	}
 
 //	@Test
 //	void testPostListaAlternativasComQuestaoSalva() {

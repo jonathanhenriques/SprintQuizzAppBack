@@ -79,4 +79,12 @@ public interface AlternativaService {
 	void deleteById(Long id);
 
 	
+	/**
+	 * Método que salva uma lista de Alternativas
+	 * 
+	 * @param List<Alternativa> alternativasDTO
+	 */
+	List<AlternativaDTO> postListaAlternativa(List<AlternativaDTO> alternativasDTO);
+
+	
 }

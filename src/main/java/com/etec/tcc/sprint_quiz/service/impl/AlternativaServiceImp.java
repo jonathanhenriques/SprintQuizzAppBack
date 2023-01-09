@@ -3,12 +3,13 @@ package com.etec.tcc.sprint_quiz.service.impl;
 import java.util.List;
 
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 
-import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.etec.tcc.sprint_quiz.configuration.TesteConfigBd;
 import com.etec.tcc.sprint_quiz.exception.AlternativaNotFoundException;
@@ -129,21 +130,14 @@ public class AlternativaServiceImp implements AlternativaService {
 	}
 	
 
-//	@Override
-//	public List<Alternativa> postListaAlternativa(List<Alternativa> alternativas) {
-//		Questao questao = questaoRepository.findById(alternativas.get(0).getQuestao().getId())
-//				.orElseThrow(() -> new RegraNegocioException(
-//						"Questão não encontrada | id:" + alternativas.get(0).getQuestao().getId()));
-//
-//		alternativas.forEach(a -> {
-//			questao.getAlternativas().add(a);
-//		});
-//
-//		alternativaRepository.saveAll(alternativas);
-//
-//		questaoService.putQuestao(questao);
-//		return alternativas;
-//	}
+	@Override
+	public List<AlternativaDTO> postListaAlternativa(@Valid @RequestBody  List<AlternativaDTO> alternativasDTO) {
+		List<Alternativa> alternativas = modelMapper.mapAll(alternativasDTO, Alternativa.class);
+		List<Alternativa> listaSalva = alternativaRepository.saveAll(alternativas);
+		List<AlternativaDTO> listaDTO = modelMapper.mapAll(listaSalva, AlternativaDTO.class);
+
+		return listaDTO;
+	}
 
 //	public List<Alternativa> postListaAlternativasComQuestaoSalva(List<Alternativa> alternativas) {
 //		Questao questao = alternativas.get(0).getQuestao();
