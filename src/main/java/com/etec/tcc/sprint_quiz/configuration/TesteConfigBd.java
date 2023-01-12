@@ -1,13 +1,5 @@
 package com.etec.tcc.sprint_quiz.configuration;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,15 +7,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 
-import com.etec.tcc.sprint_quiz.enums.DificuldadeQuestao;
-import com.etec.tcc.sprint_quiz.model.Alternativa;
-import com.etec.tcc.sprint_quiz.model.CategoriaProva;
-import com.etec.tcc.sprint_quiz.model.CategoriaQuestao;
-import com.etec.tcc.sprint_quiz.model.Prova;
-import com.etec.tcc.sprint_quiz.model.Questao;
-import com.etec.tcc.sprint_quiz.model.QuestaoProva;
-import com.etec.tcc.sprint_quiz.model.Role;
-import com.etec.tcc.sprint_quiz.model.Usuario;
 //import com.etec.tcc.sprint_quiz.model.testemodels.AlternativaTeste;
 //import com.etec.tcc.sprint_quiz.model.testemodels.AlternativaTesteRepository;
 //import com.etec.tcc.sprint_quiz.model.testemodels.QuestaoTeste;

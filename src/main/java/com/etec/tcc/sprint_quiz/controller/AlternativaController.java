@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -84,6 +85,11 @@ public class AlternativaController {
 	@Operation(summary = "Obtem uma alternativa pelo id")
 	@GetMapping("/{id}")
 	public ResponseEntity<AlternativaDTO> getById(@PathVariable Long id) {
+//		AlternativaDTO dto = alternativaService.getById(id);
+//		HttpHeaders headers = new HttpHeaders();
+//		headers.add("Content-Type", "application/json; charset=utf-8");
+//		return new ResponseEntity<AlternativaDTO>(new AlternativaDTO(1L,"texto sfs",""),headers,HttpStatus.OK);
+		
 		return ResponseEntity.ok(alternativaService.getById(id));
 	}
 
@@ -108,11 +114,6 @@ public class AlternativaController {
 		return ResponseEntity.ok(alternativaService.getAllByTexto(texto));
 	}
 
-//    @Operation(summary = "cria várias alternativas")
-//    @PostMapping("/listaAlternativas")
-//    public ResponseEntity<List<AlternativaDTO>> postListaAlternativa(@Valid @RequestBody List<Alternativa> alternativas) {
-//        return ResponseEntity.status(HttpStatus.CREATED).body(alternativaService.postListaAlternativa(alternativas));
-//    }
 
 	/**
 	 * Método que cria uma Alternativa.
@@ -129,10 +130,34 @@ public class AlternativaController {
 	 *         Encontrado!. 500 - Server Errors: Erro na Aplicação!.
 	 * 
 	 */
+//	@Operation(summary = "cria uma nova alternativa")
+//	@PostMapping()
+////	@RequestMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+//	public ResponseEntity<AlternativaDTO> post(@Valid @RequestBody AlternativaDTO alternativaDTO) {
+//		HttpHeaders headers = new HttpHeaders();
+//		headers.add("Content-Type", "application/json; charset=utf-8");
+////		AlternativaDTO dto = alternativaService.post(alternativaDTO);
+////		return new ResponseEntity<AlternativaDTO>(dto, headers, HttpStatus.CREATED);
+//		return new ResponseEntity<AlternativaDTO>(new AlternativaDTO(1L, "texto alternativaDTO", ""), headers, HttpStatus.CREATED);
+////		return new ResponseEntity<AlternativaDTO>(new AlternativaDTO(1L, "texto alternativaDTO", ""), HttpStatus.CREATED);
+////		return ResponseEntity.status(HttpStatus.CREATED).body(alternativaService.post(alternativaDTO));
+////		return alternativaService.post(alternativaDTO);
+//		
+//	}
+	
 	@Operation(summary = "cria uma nova alternativa")
-	@PostMapping
+	@PostMapping()
+//	@RequestMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<AlternativaDTO> post(@Valid @RequestBody AlternativaDTO alternativaDTO) {
-		return ResponseEntity.status(HttpStatus.CREATED).body(alternativaService.post(alternativaDTO));
+//		HttpHeaders headers = new HttpHeaders();
+//		headers.add("Content-Type", "application/json; charset=utf-8");
+//		AlternativaDTO dto = alternativaService.post(alternativaDTO);
+//		return new ResponseEntity<AlternativaDTO>(dto, headers, HttpStatus.CREATED);
+//		return new ResponseEntity<AlternativaDTO>(new AlternativaDTO(1L, "texto alternativaDTO", ""), headers, HttpStatus.CREATED);
+//		return new ResponseEntity<AlternativaDTO>(new AlternativaDTO(1L, "texto alternativaDTO", ""), HttpStatus.CREATED);
+		return ResponseEntity.status(HttpStatus.CREATED).header("Content-Type", "application/json; charset=utf-8").body(alternativaService.post(alternativaDTO));
+//		return alternativaService.post(alternativaDTO);
+		
 	}
 	
 	

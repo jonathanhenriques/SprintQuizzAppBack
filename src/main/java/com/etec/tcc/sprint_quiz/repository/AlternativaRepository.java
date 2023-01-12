@@ -1,8 +1,6 @@
 package com.etec.tcc.sprint_quiz.repository;
 
 import com.etec.tcc.sprint_quiz.model.Alternativa;
-import com.etec.tcc.sprint_quiz.model.dto.AlternativaDTO;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

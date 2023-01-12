@@ -1,15 +1,9 @@
 package com.etec.tcc.sprint_quiz.model.dto;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.etec.tcc.sprint_quiz.model.Alternativa;
-import com.etec.tcc.sprint_quiz.service.QuestaoService;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

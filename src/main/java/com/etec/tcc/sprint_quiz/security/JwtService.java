@@ -9,7 +9,6 @@ import java.util.HashMap;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.etec.tcc.sprint_quiz.configuration.Producao;
 import com.etec.tcc.sprint_quiz.model.Usuario;
 
 import io.jsonwebtoken.Claims;
